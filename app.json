@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "workScheduler",
-    "slug": "workScheduler",
+    "slug": "workschedulerapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "464a5dab-bca8-456b-8fc6-916c7f5a6a45"
+      }
+    },
+    "owner": "tym3ek"
   }
 }
