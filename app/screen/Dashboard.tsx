@@ -10,7 +10,7 @@ interface RouterProps {
 const Dashboard = ( {navigation}: RouterProps ) => {
   return (
     <View style={styles.view}>
-        <Button onPress={() => navigation.navigate('dashboard')} title='Go to Dashboard'></Button>
+        <Button onPress={() => navigation.navigate('Schedule')} title='Go to Schedule'></Button>
         <Button onPress={() => FIREBASE_AUTH.signOut()} title='Logout'></Button>
     </View>
   )
