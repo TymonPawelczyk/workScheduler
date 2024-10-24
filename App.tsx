@@ -1,13 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './app/screen/Login';
-import Dashboard from './app/screen/Dashboard';
-import Schedule from './app/screen/Schedule';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from '@firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
+
+import Login from './app/screen/Login';
+import Dashboard from './app/screen/Dashboard';
+import Schedule from './app/screen/Schedule';
 import Availability from './app/screen/Availability';
 import SelectTime from './app/screen/SelectTime';
+import Calendar from './app/screen/Calendar';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,7 @@ function InsideLayout() {
         <InsideStack.Screen name='Schedule' component={Schedule}/>
         <InsideStack.Screen name='Availability' component={Availability}/>
         <InsideStack.Screen name='SelectTime' component={SelectTime}/>
+        <InsideStack.Screen name='Calendar' component={Calendar}/>
      </InsideStack.Navigator>
   )
 }

@@ -10,7 +10,7 @@ interface RouterProps {
 const Availability = ({navigation}: RouterProps) => {
   return (
     <View style={styles.view}>
-        <Button onPress={() => navigation.navigate('SelectTime')} title='Select Time'></Button>
+        <Button onPress={() => navigation.navigate('Calendar')} title='Calendar'></Button>
         <Button onPress={() => FIREBASE_AUTH.signOut()} title='Logout'></Button>
     </View>
   )
