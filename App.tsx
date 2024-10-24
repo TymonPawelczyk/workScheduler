@@ -6,6 +6,8 @@ import Schedule from './app/screen/Schedule';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from '@firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
+import Availability from './app/screen/Availability';
+import SelectTime from './app/screen/SelectTime';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,8 @@ function InsideLayout() {
      <InsideStack.Navigator>
         <InsideStack.Screen name='Dashboard' component={Dashboard}/>
         <InsideStack.Screen name='Schedule' component={Schedule}/>
+        <InsideStack.Screen name='Availability' component={Availability}/>
+        <InsideStack.Screen name='SelectTime' component={SelectTime}/>
      </InsideStack.Navigator>
   )
 }

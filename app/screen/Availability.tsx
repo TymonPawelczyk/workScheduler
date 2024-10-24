@@ -4,24 +4,24 @@ import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 
 interface RouterProps {
-    navigation: NavigationProp<any, any>;
+  navigation: NavigationProp<any, any>;
 }
 
-const Dashboard = ( {navigation}: RouterProps ) => {
+const Availability = ({navigation}: RouterProps) => {
   return (
     <View style={styles.view}>
-        <Button onPress={() => navigation.navigate('Availability')} title='Go to Schedule/ Ava'></Button>
+        <Button onPress={() => navigation.navigate('SelectTime')} title='Select Time'></Button>
         <Button onPress={() => FIREBASE_AUTH.signOut()} title='Logout'></Button>
     </View>
   )
 }
 
-export default Dashboard
+export default Availability
 
 const styles = StyleSheet.create({
-    view: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
+  view: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
