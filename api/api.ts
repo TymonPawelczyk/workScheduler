@@ -1,17 +1,19 @@
 import axios from 'axios';
 
-const API_URL = 'https://671b64ad2c842d92c37fb3ad.mockapi.io/api/v1/'; // podmień na adres API
+const API_URL = 'https://671b64ad2c842d92c37fb3ad.mockapi.io/api/v1';
 
-// Przykład: Dodawanie danych o dostępności
-export const setAvailability = async (employeeId: string, availabilityData: any) => {
-    try {
+export const setAvailability = async (
+  employeeId: string,
+  availabilityData: { isAvailable: boolean; date: string; start: string; end: string }
+) => {
+  try {
     const response = await axios.post(`${API_URL}/availability`, {
-        employeeId,
-        ...availabilityData,
+      employeeId,
+      ...availabilityData,
     });
     return response.data;
-    } catch (error) {
+  } catch (error) {
     console.error('Błąd zapisywania dostępności:', error);
     throw error;
-    }
+  }
 };

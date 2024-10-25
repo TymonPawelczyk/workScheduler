@@ -2,20 +2,21 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { setAvailability } from '../../api/api'; // Import funkcji setAvailability
+import { setAvailability } from '../../api/api';
 
 interface RouterProps {
   navigation: NavigationProp<any, any>;
 }
 
 const Availability = ({ navigation }: RouterProps) => {
-  // Funkcja do dodania dostępności pracownika
   const handleAddAvailability = async () => {
     try {
       const availabilityData = {
         employeeId: 'employeeId123',
         isAvailable: true,
-        date: '2024-10-25', // przykładowa data
+        date: '2024-10-25',       // przykładowa data
+        start: '08:00',            // godzina rozpoczęcia zmiany
+        end: '16:00',              // godzina zakończenia zmiany
       };
       const response = await setAvailability(availabilityData.employeeId, availabilityData);
       console.log('Dostępność dodana:', response);
