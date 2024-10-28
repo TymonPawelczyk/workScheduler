@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from '@firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
@@ -11,22 +11,21 @@ import Availability from './app/screen/Availability';
 import SelectTime from './app/screen/SelectTime';
 import Calendar from './app/screen/Calendar';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const InsideStack = createNativeStackNavigator();
-
-function InsideLayout() {
+function InsideTabs({ user }: { user: User | null }) {
   return (
-     <InsideStack.Navigator>
-        <InsideStack.Screen name='Dashboard' component={Dashboard}/>
-        <InsideStack.Screen name='Schedule' component={Schedule}/>
-        <InsideStack.Screen name='Availability' component={Availability}/>
-        <InsideStack.Screen name='SelectTime' component={SelectTime}/>
-        <InsideStack.Screen name='Calendar' component={Calendar}/>
-     </InsideStack.Navigator>
-  )
+    <Tab.Navigator>
+      <Tab.Screen name='Dashboard' component={Dashboard} />
+      {user?.email && !user.email.includes('emp') && (
+        <Tab.Screen name='Schedule' component={Schedule} />
+      )}
+      <Tab.Screen name='Availability' component={Availability} />
+      <Tab.Screen name='SelectTime' component={SelectTime} />
+      <Tab.Screen name='Calendar' component={Calendar} />
+    </Tab.Navigator>
+  );
 }
-
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -34,23 +33,16 @@ export default function App() {
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
-    })
+    });
   }, []);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-
-        { user ? (
-          <Stack.Screen name='Inside' component={InsideLayout} options={ {headerShown:  false} }/>
-          ) : (
-          <Stack.Screen name='Login' component={Login} options={ {headerShown:  false} }/>
-
-          )}
-  
-      </Stack.Navigator>
+      { user ? (
+        <InsideTabs user={user} />
+      ) : (
+        <Login />
+      )}
     </NavigationContainer>
   );
 }
-
-
