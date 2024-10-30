@@ -12,6 +12,9 @@ const CalendarView = () => {
 
   return (
     <View style={styles.container}>
+      <Text>
+        Kalendarz dla pracownika - wyswietlajacy zmiany na czerwono i wolne na zielono, dla menago - wyswietla ludzi ktorzy maja w danym dniu zmiany
+      </Text>
       <Text style={styles.header}>Select a date</Text>
       <Calendar
         onDayPress={handleDayPress} // Call when a day is pressed

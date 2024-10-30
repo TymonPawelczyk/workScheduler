@@ -27,6 +27,7 @@ const Availability = ({ navigation }: RouterProps) => {
 
   return (
     <View style={styles.view}>
+      <Text>Tutaj dodawanie swojej dostepnosci</Text>
       <Button onPress={() => navigation.navigate('Calendar')} title="Calendar" />
       <Button onPress={() => FIREBASE_AUTH.signOut()} title="Logout" />
       <Button onPress={handleAddAvailability} title="Dodaj dostępność" />

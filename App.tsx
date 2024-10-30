@@ -20,8 +20,10 @@ function InsideTabs({ user }: { user: User | null }) {
       {user?.email && !user.email.includes('emp') && (
         <Tab.Screen name='Schedule' component={Schedule} />
       )}
-      <Tab.Screen name='Availability' component={Availability} />
-      <Tab.Screen name='SelectTime' component={SelectTime} />
+      {user?.email && !user.email.includes('mena') && (
+        <Tab.Screen name='Availability' component={Availability} />
+      )}
+      {/* <Tab.Screen name='SelectTime' component={SelectTime} /> */}
       <Tab.Screen name='Calendar' component={Calendar} />
     </Tab.Navigator>
   );

@@ -5,6 +5,7 @@ const Schedule = () => {
   return (
     <View>
       <Text>Schedule</Text>
+      <Text>Generowanie grafiku oraz wprowadzanie recznych zmian, narazie praca w formie 2 lub 3 zmianowiej bez dowolnosci godzin</Text>
     </View>
   )
 }
