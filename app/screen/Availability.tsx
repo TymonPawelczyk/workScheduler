@@ -78,20 +78,30 @@ const Availability = ({ navigation }: RouterProps) => {
         markedDates={{
           [selectedDate || '']: {
             selected: true,
-            selectedColor: '#457b9d', // Ustawienie koloru wybranej daty
+            selectedColor: '#14213d', // Ustawienie koloru wybranej daty
           },
         }}
         theme={{
           selectedDayBackgroundColor: '#00adf5', // Ustawienie koloru 
-          todayTextColor: '#457b9d',
-          arrowColor: '#457b9d',
+          todayTextColor: '#fca311',
+          arrowColor: '#fca311',
           backgroundColor: '#ffffff', // Zmień na dowolny kolor tła
           calendarBackground: '#f0f0f0',
+          // Kolory tekstów dni
+          textSectionTitleColor: '#333333', // Kolor nazw dni tygodnia (np. "Mon", "Tue")
+          dayTextColor: '#000000', // Kolor numerów dni
+          textDisabledColor: '#adb5bd', // Kolor dni spoza bieżącego miesiąca
+          monthTextColor: '#fca311', // Kolor tekstu miesiąca
         }}
       />
       
       <View style={styles.shiftSelector}>
-        <Text>Select Shift:</Text>
+        <Text style={{
+          color: '#000000',
+          fontWeight: 'bold',
+          fontSize: 20
+        }}>Select Shift:</Text>
+        <View>
         <Picker
           selectedValue={selectedShift}
           onValueChange={(itemValue) => setSelectedShift(itemValue)}
@@ -100,6 +110,7 @@ const Availability = ({ navigation }: RouterProps) => {
           <Picker.Item label="Afternoon Shift (14:00-22:00)" value={ShiftType.AFTERNOON} />
           <Picker.Item label="Night Shift (22:00-6:00)" value={ShiftType.NIGHT} />
         </Picker>
+        </View>
       </View>
 
       <Pressable style={styles.button} onPress={handleAddAvailability}>
@@ -113,12 +124,13 @@ const Availability = ({ navigation }: RouterProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 15,
   },
   shiftSelector: {
-    marginVertical: 16,
+    marginVertical: 15,
   },
   button: {
+    marginHorizontal: 50,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
