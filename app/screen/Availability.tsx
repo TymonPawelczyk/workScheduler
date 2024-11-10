@@ -87,6 +87,11 @@ const Availability = ({ navigation }: RouterProps) => {
           arrowColor: '#fca311',
           backgroundColor: '#ffffff', // Zmień na dowolny kolor tła
           calendarBackground: '#f0f0f0',
+          // Kolory tekstów dni
+          textSectionTitleColor: '#333333', // Kolor nazw dni tygodnia (np. "Mon", "Tue")
+          dayTextColor: '#000000', // Kolor numerów dni
+          textDisabledColor: '#adb5bd', // Kolor dni spoza bieżącego miesiąca
+          monthTextColor: '#fca311', // Kolor tekstu miesiąca
         }}
       />
       
