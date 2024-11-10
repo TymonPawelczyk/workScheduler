@@ -22,17 +22,25 @@ function InsideTabs({ user }: { user: User | null }) {
       <Tab.Screen name='Dashboard' component={Dashboard} 
       options={{
           title: 'Dashboard',
+          headerStyle: {
+            backgroundColor: '#14213d',
+          },
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'albums' : 'albums-outline'} color={color} size={24} />
           ),
+          headerTintColor: '#e5e5e5',
         }}/>
       {user?.email && !user.email.includes('emp') && (
         <Tab.Screen name='Schedule' component={Schedule} 
         options={{
           title: 'Schedule',
+          headerStyle: {
+            backgroundColor: '#14213d',
+          },
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={color} size={24} />
           ),
+          headerTintColor: '#e5e5e5',
         }}
         />
       )}
@@ -40,9 +48,13 @@ function InsideTabs({ user }: { user: User | null }) {
         <Tab.Screen name='Availability' component={Availability} 
         options={{
           title: 'Availability',
+          headerStyle: {
+            backgroundColor: '#14213d',
+          },
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'bag-add' : 'bag-add-outline'} color={color} size={24} />
           ),
+          headerTintColor: '#e5e5e5',
         }}
         />
       )}
