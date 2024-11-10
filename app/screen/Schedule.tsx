@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
 import React, { useState } from 'react';
+import axios from 'axios';
+import { API_URL } from '../../api/api';
 
 interface AvailabilityData {
   id: string;
@@ -22,58 +24,109 @@ interface ScheduleData {
 }
 
 const Schedule = () => {
-  const [availabilityData, setAvailabilityData] = useState<AvailabilityData[]>([
-    // Przykładowe dane dostępności
-    { id: '1', employeeId: 'E1', date: '2024-11-10', start: '06:00', end: '14:00', shiftType: 'MORNING', qualifications: ['standard'], preferences: { preferredShifts: ['MORNING'], unavailableDays: [] }},
-    { id: '2', employeeId: 'E2', date: '2024-11-10', start: '14:00', end: '22:00', shiftType: 'AFTERNOON', qualifications: ['standard'], preferences: { preferredShifts: ['AFTERNOON'], unavailableDays: [] }},
-    // Dodaj więcej danych o dostępności pracowników
-  ]);
+  const [availabilityData, setAvailabilityData] = useState<AvailabilityData[]>([]);
   const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Funkcja generująca harmonogram
+  // Funkcja do pobierania danych o dostępności z API
+  const fetchAvailability = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API_URL}/availability`);
+      setAvailabilityData(response.data);
+      setError(null);
+    } catch (err: any) {
+      if (err.response) {
+        setError(`Server error: ${err.response.status}`);
+      } else if (err.request) {
+        setError('Network error - check your connection');
+      } else {
+        setError('Failed to fetch availability data');
+      }
+      console.error('Error fetching availability:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Funkcja generująca harmonogram z ograniczeniami
   const generateSchedule = () => {
     const generatedSchedule: ScheduleData[] = [];
+    const scheduleMap: { [key: string]: number } = {}; // Klucz: `${date}_${shiftType}`, Wartość: liczba pracowników
 
     availabilityData.forEach((availability) => {
       const { date, shiftType, employeeId, preferences, qualifications } = availability;
+      const scheduleKey = `${date}_${shiftType}`;
 
-      // Sprawdź, czy pracownik ma preferencję na ten typ zmiany i kwalifikacje
+      // Sprawdzenie preferencji zmiany i kwalifikacji
       if (preferences.preferredShifts.includes(shiftType) && qualifications.includes('standard')) {
-        generatedSchedule.push({
-          date,
-          shiftType,
-          employeeId,
-        });
+        // Sprawdzenie, czy pracownik nie ma już przydzielonej zmiany na dany dzień
+        const alreadyScheduled = generatedSchedule.some(
+          (shift) => shift.date === date && shift.employeeId === employeeId
+        );
+
+        // Sprawdzenie, czy zmiana ma już maksymalnie dwóch pracowników
+        const shiftCapacityReached = (scheduleMap[scheduleKey] || 0) >= 2;
+
+        if (!alreadyScheduled && !shiftCapacityReached) {
+          generatedSchedule.push({
+            date,
+            shiftType,
+            employeeId,
+          });
+
+          // Zaktualizowanie liczby pracowników na danej zmianie
+          scheduleMap[scheduleKey] = (scheduleMap[scheduleKey] || 0) + 1;
+        }
       }
     });
 
     setScheduleData(generatedSchedule);
   };
 
+  // Grupowanie harmonogramu wg daty
+  const groupedSchedule = scheduleData.reduce<{ [date: string]: ScheduleData[] }>((acc, item) => {
+    if (!acc[item.date]) {
+      acc[item.date] = [];
+    }
+    acc[item.date].push(item);
+    return acc;
+  }, {});
+
   return (
     <View style={styles.container}>
       <Button 
+        title={loading ? "Loading..." : "Fetch Employee Availability"}
+        onPress={fetchAvailability}
+        disabled={loading}
+      />
+      <Button 
         title="Generate Schedule"
         onPress={generateSchedule}
+        disabled={loading || availabilityData.length === 0}
       />
+      
+      {error && <Text style={styles.errorText}>{error}</Text>}
       
       <ScrollView>
         <Text style={styles.header}>Generated Schedule</Text>
-        {scheduleData.length > 0 ? (
-          <View>
-            <View style={styles.tableHeader}>
-              <Text style={styles.headerCell}>Date</Text>
-              <Text style={styles.headerCell}>Shift Type</Text>
-              <Text style={styles.headerCell}>Employee ID</Text>
-            </View>
-            {scheduleData.map((item, index) => (
-              <View key={index} style={styles.tableRow}>
-                <Text style={styles.cell}>{item.date}</Text>
-                <Text style={styles.cell}>{item.shiftType}</Text>
-                <Text style={styles.cell}>{item.employeeId}</Text>
+        {Object.keys(groupedSchedule).length > 0 ? (
+          Object.keys(groupedSchedule).map((date) => (
+            <View key={date} style={styles.daySection}>
+              <Text style={styles.dateHeader}>{date}</Text>
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerCell}>Shift Type</Text>
+                <Text style={styles.headerCell}>Employee ID</Text>
               </View>
-            ))}
-          </View>
+              {groupedSchedule[date].map((shift, index) => (
+                <View key={index} style={styles.tableRow}>
+                  <Text style={styles.cell}>{shift.shiftType}</Text>
+                  <Text style={styles.cell}>{shift.employeeId}</Text>
+                </View>
+              ))}
+            </View>
+          ))
         ) : (
           <Text style={styles.placeholder}>No schedule generated yet.</Text>
         )}
@@ -91,6 +144,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+  },
+  daySection: {
+    marginBottom: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  dateHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#333',
   },
   tableHeader: {
     flexDirection: 'row',
@@ -112,6 +177,11 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginVertical: 10,
   },
   placeholder: {
     textAlign: 'center',
