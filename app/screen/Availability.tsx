@@ -117,12 +117,13 @@ const Availability = ({ navigation }: RouterProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 15,
   },
   shiftSelector: {
-    marginVertical: 16,
+    marginVertical: 15,
   },
   button: {
+    marginHorizontal: 50,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
