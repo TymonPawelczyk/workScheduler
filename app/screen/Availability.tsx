@@ -75,6 +75,17 @@ const Availability = ({ navigation }: RouterProps) => {
       <Calendar 
         selectedDate={selectedDate}
         onDayPress={handleDayPress}
+        markedDates={{
+          [selectedDate || '']: {
+            selected: true,
+            selectedColor: '#fca311', // Ustawienie koloru 
+          },
+        }}
+        theme={{
+          selectedDayBackgroundColor: '#00adf5', // Ustawienie koloru 
+          todayTextColor: '#00adf5',
+          arrowColor: '#00adf5',
+        }}
       />
       
       <View style={styles.shiftSelector}>
