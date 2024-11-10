@@ -24,7 +24,7 @@ function InsideTabs({ user }: { user: User | null }) {
         <Tab.Screen name='Availability' component={Availability} />
       )}
       {/* <Tab.Screen name='SelectTime' component={SelectTime} /> */}
-      <Tab.Screen name='Calendar' component={Calendar} />
+      {/* <Tab.Screen name='Calendar' component={Calendar} /> */}
     </Tab.Navigator>
   );
 }

@@ -11,7 +11,6 @@ const Dashboard = ( {navigation}: RouterProps ) => {
   return (
     <View style={styles.view}>
         <Text>Tutaj beda dane takie jak zarobki i inne statystyki w formie wykresow</Text>
-        <Button onPress={() => navigation.navigate('Availability')} title='Go to Availability'></Button>
         <Button onPress={() => FIREBASE_AUTH.signOut()} title='Logout'></Button>
     </View>
   )
