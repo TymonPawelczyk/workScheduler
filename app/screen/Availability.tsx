@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
@@ -102,10 +102,10 @@ const Availability = ({ navigation }: RouterProps) => {
         </Picker>
       </View>
 
-      <Button 
-        title="Add Availability" 
-        onPress={handleAddAvailability}
-      />
+      <Pressable style={styles.button} onPress={handleAddAvailability}>
+        <Text style={styles.text}>Add Availability</Text>
+      </Pressable>
+
     </View>
   );
 };
@@ -117,7 +117,23 @@ const styles = StyleSheet.create({
   },
   shiftSelector: {
     marginVertical: 16,
-  }
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
 });
 
 export default Availability;

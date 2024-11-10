@@ -17,7 +17,13 @@ function InsideTabs({ user }: { user: User | null }) {
   return (
     <Tab.Navigator
     screenOptions={{
-        tabBarStyle: { backgroundColor: '#f0f0f0' }, // Ustawienie koloru tła paska kart
+        tabBarStyle: { backgroundColor: '#f0f0f0',
+         }, // Ustawienie koloru tła paska kart
+        tabBarLabelStyle: {
+          fontSize: 12, // Rozmiar tekstu etykiety
+          fontWeight: '500', // Styl czcionki etykiety
+          color: '#3a86ff',
+        },
       }}>
       <Tab.Screen name='Dashboard' component={Dashboard} 
       options={{
@@ -26,7 +32,7 @@ function InsideTabs({ user }: { user: User | null }) {
             backgroundColor: '#14213d',
           },
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'albums' : 'albums-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'albums' : 'albums-outline'} color={'#fca311'} size={24} />
           ),
           headerTintColor: '#e5e5e5',
         }}/>
@@ -38,7 +44,7 @@ function InsideTabs({ user }: { user: User | null }) {
             backgroundColor: '#14213d',
           },
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} color={'#fca311'} size={24} />
           ),
           headerTintColor: '#e5e5e5',
         }}
@@ -52,7 +58,7 @@ function InsideTabs({ user }: { user: User | null }) {
             backgroundColor: '#14213d',
           },
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'bag-add' : 'bag-add-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'bag-add' : 'bag-add-outline'} color={'#fca311'} size={24} />
           ),
           headerTintColor: '#e5e5e5',
         }}
