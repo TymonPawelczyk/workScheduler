@@ -15,7 +15,10 @@ const Tab = createBottomTabNavigator();
 
 function InsideTabs({ user }: { user: User | null }) {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+    screenOptions={{
+        tabBarStyle: { backgroundColor: '#f0f0f0' }, // Ustawienie koloru tła paska kart
+      }}>
       <Tab.Screen name='Dashboard' component={Dashboard} 
       options={{
           title: 'Dashboard',
