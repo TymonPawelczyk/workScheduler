@@ -78,20 +78,24 @@ const Availability = ({ navigation }: RouterProps) => {
         markedDates={{
           [selectedDate || '']: {
             selected: true,
-            selectedColor: '#457b9d', // Ustawienie koloru wybranej daty
+            selectedColor: '#14213d', // Ustawienie koloru wybranej daty
           },
         }}
         theme={{
           selectedDayBackgroundColor: '#00adf5', // Ustawienie koloru 
-          todayTextColor: '#457b9d',
-          arrowColor: '#457b9d',
+          todayTextColor: '#fca311',
+          arrowColor: '#fca311',
           backgroundColor: '#ffffff', // Zmień na dowolny kolor tła
           calendarBackground: '#f0f0f0',
         }}
       />
       
       <View style={styles.shiftSelector}>
-        <Text>Select Shift:</Text>
+        <Text style={{
+          color: '#000000',
+          fontWeight: 'bold',
+          fontSize: 20
+        }}>Select Shift:</Text>
         <Picker
           selectedValue={selectedShift}
           onValueChange={(itemValue) => setSelectedShift(itemValue)}
