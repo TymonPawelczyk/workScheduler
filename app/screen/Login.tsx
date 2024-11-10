@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardAvoidingView, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
@@ -40,14 +40,18 @@ const Login = () => {
     <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
         <TextInput value={email} style={styles.input} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}></TextInput>
-        <TextInput value={password} secureTextEntry={true} style={styles.input} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
+        <TextInput value={password} secureTextEntry={true} style={styles.input} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
 
         { loading ? (
             <ActivityIndicator size='large' color='#0000ff'/>
         ) : (
             <>
-            <Button title='Login' onPress={signIn}/>
-            <Button title='Create account' onPress={signUp}/>
+            <Pressable style={styles.button} onPress={signIn}>
+                <Text style={styles.text}>Login</Text>
+            </Pressable>
+            <Pressable style={styles.button} onPress={signUp}>
+                <Text style={styles.text}>Sing Up</Text>
+            </Pressable>
             </>
         )}
         </KeyboardAvoidingView>
@@ -59,16 +63,36 @@ export default Login;
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20,
+        marginHorizontal: 0,
         flex: 1,
         justifyContent: 'center',
+        backgroundColor: '#14213d',
     },
     input: {
-        marginVertical: 4,
+        marginBottom: 15,
+        marginHorizontal: 60,
         height: 50,
         borderWidth: 1,
         borderRadius: 4,
         padding: 10,
         backgroundColor: '#fff'
-    }
+    },
+    button: {
+        marginVertical: 4,
+        marginHorizontal: 120,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: 'black',
+      },
+      text: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
+      },
 })
