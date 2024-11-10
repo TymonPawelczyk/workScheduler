@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Pressable, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../api/api';
@@ -96,16 +96,29 @@ const Schedule = () => {
 
   return (
     <View style={styles.container}>
-      <Button 
-        title={loading ? "Loading..." : "Fetch Employee Availability"}
+        <Pressable
+        style={[styles.button, loading && styles.buttonDisabled]}
         onPress={fetchAvailability}
         disabled={loading}
-      />
-      <Button 
-        title="Generate Schedule"
+        >
+        {loading ? (
+          <ActivityIndicator size="small" color="#ffffff" />
+        ) : (
+          <Text style={styles.text}>Fetch Employee Availability</Text>
+        )}
+        </Pressable>
+        
+        <Pressable
+        style={[styles.button, loading && styles.buttonDisabled]}
         onPress={generateSchedule}
         disabled={loading || availabilityData.length === 0}
-      />
+        >
+        {loading ? (
+          <ActivityIndicator size="small" color="#ffffff" />
+        ) : (
+          <Text style={styles.text}>Generate Schedule</Text>
+        )}
+        </Pressable>
       
       {error && <Text style={styles.errorText}>{error}</Text>}
       
@@ -187,7 +200,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#888',
     marginTop: 20,
-  }
+  },
+  button: {
+    marginVertical: 4,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+  },
+  buttonDisabled: {
+    backgroundColor: '#000000', // Kolor, gdy przycisk jest nieaktywny
+  },
+  text: {
+    color: '#ffffff', // Kolor tekstu przycisku
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default Schedule;
