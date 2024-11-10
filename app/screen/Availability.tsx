@@ -96,6 +96,7 @@ const Availability = ({ navigation }: RouterProps) => {
           fontWeight: 'bold',
           fontSize: 20
         }}>Select Shift:</Text>
+        <View>
         <Picker
           selectedValue={selectedShift}
           onValueChange={(itemValue) => setSelectedShift(itemValue)}
@@ -104,6 +105,7 @@ const Availability = ({ navigation }: RouterProps) => {
           <Picker.Item label="Afternoon Shift (14:00-22:00)" value={ShiftType.AFTERNOON} />
           <Picker.Item label="Night Shift (22:00-6:00)" value={ShiftType.NIGHT} />
         </Picker>
+        </View>
       </View>
 
       <Pressable style={styles.button} onPress={handleAddAvailability}>
