@@ -30,8 +30,8 @@ export const sendAvailabilityData = async (userId: string, availabilityData: any
       ...availabilityData
     });
     return response.data;
-  } catch (error) {
-    if (error === 'Duplicate entry') {
+  } catch (error: any) {
+    if (error.message === 'Duplicate entry') {
       // Już wyświetliliśmy alert, więc tylko przekazujemy błąd dalej
       throw error;
     }
