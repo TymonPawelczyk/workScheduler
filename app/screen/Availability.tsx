@@ -24,9 +24,9 @@ const Availability = ({ navigation }: RouterProps) => {
 
   const handleAddAvailability = async () => {
     try {
-      const currentUser = FIREBASE_AUTH.currentUser;
+      const currentUser = FIREBASE_AUTH.currentUser?.email;
       
-      if (!currentUser?.uid) {
+      if (!currentUser) {
         throw new Error('User not authenticated');
       }
 
@@ -49,7 +49,7 @@ const Availability = ({ navigation }: RouterProps) => {
       }
 
       const availabilityData = {
-        employeeId: currentUser.uid,
+        employeeId: currentUser,
         isAvailable: true,
         date: selectedDate,
         start: shiftHours.start,
