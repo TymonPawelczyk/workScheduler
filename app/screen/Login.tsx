@@ -39,7 +39,11 @@ const Login = () => {
     return (
     <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
-        <Text style={styles.titleLogin}>Welcome</Text>
+        <Text style={styles.titleLogin}>Welcome
+            <Text>
+                👋
+            </Text>
+        </Text>
         <View>
         <TextInput value={email} style={styles.input} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}></TextInput>
         <TextInput value={password} secureTextEntry={true} style={styles.input} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
         color: 'white',
       },
       titleLogin: {
-        marginHorizontal: 120,
+        marginHorizontal: 100,
         marginBottom: 50,
         justifyContent: 'center',
         fontSize: 30,
@@ -107,3 +111,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
       }
 })
+
+function withRepeat(arg0: any, arg1: number) {
+    throw new Error('Function not implemented.');
+}
+
+
+function withSequence(arg0: any, arg1: any): any {
+    throw new Error('Function not implemented.');
+}
+
+
+function withTiming(arg0: number, arg1: { duration: number; }): any {
+    throw new Error('Function not implemented.');
+}
