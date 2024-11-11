@@ -82,7 +82,7 @@ const Schedule = () => {
       }
     });
 
-    setScheduleData(generatedSchedule);
+    setScheduleData(generatedSchedule.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
   };
 
   // Grupowanie harmonogramu wg daty
