@@ -6,6 +6,15 @@ test.beforeEach(async ({page}) => {
   await page.goto('http://localhost:8081/');
 });
 
-test('Add availability', async ({ page }) => {
-  await expect(page.getByText('Welcome')).toBeVisible();
+employees.Login.forEach(email => {
+  const password = employees.Password;
+  console.log(email, password);
+  test.describe(`Adding availability for ${email}`, () => {
+    test(`Login ${email}`, async ({page}) => {
+      await loginInto(page, email, password)
+    });
+    test(`Add availability ${email}`, async ({page}) => {
+      
+    });
+  });
 });
