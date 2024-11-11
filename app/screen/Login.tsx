@@ -39,6 +39,8 @@ const Login = () => {
     return (
     <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
+        <Text style={styles.titleLogin}>Welcome</Text>
+        <View>
         <TextInput value={email} style={styles.input} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}></TextInput>
         <TextInput value={password} secureTextEntry={true} style={styles.input} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
 
@@ -54,6 +56,7 @@ const Login = () => {
             </Pressable>
             </>
         )}
+        </View>
         </KeyboardAvoidingView>
     </View>
     );
@@ -95,4 +98,12 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         color: 'white',
       },
+      titleLogin: {
+        marginHorizontal: 120,
+        marginBottom: 50,
+        justifyContent: 'center',
+        fontSize: 30,
+        color: 'white',
+        fontWeight: 'bold',
+      }
 })
