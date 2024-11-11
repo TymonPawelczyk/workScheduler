@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test';
+import employees from '../interfaces/employees';
+import { loginInto } from '../base/availability-base';
+
+test.beforeEach(async ({page}) => {
+  await page.goto('http://localhost:8081/');
+});
 
 test('Login user', async ({ page }) => {
-  await page.goto('http://localhost:8081/');
-  await expect(page.getByText('Welcome👋')).toBeVisible();
-  await page.getByPlaceholder('Email').click();
-  await page.getByPlaceholder('Email').fill('testemp1@test.com');
-  await page.getByPlaceholder('Email').press('Tab');
-  await page.getByPlaceholder('Password').fill('test123');
-  await page.locator('div').filter({ hasText: /^Login$/ }).first().click();
+  employees.Login.forEach(async (email) => {
+    await loginInto(page, email, employees.Password);
+  })
 });
 
 test('Add availability', async ({ page }) => {
