@@ -22,7 +22,7 @@ function InsideTabs({ user }: { user: User | null }) {
         tabBarLabelStyle: {
           fontSize: 12, // Rozmiar tekstu etykiety
           fontWeight: '500', // Styl czcionki etykiety
-          color: '#3a86ff',
+          color: '#000000',
         },
       }}>
       <Tab.Screen name='Dashboard' component={Dashboard} 
