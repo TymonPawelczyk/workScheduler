@@ -49,7 +49,7 @@ const Login = () => {
         <TextInput value={password} secureTextEntry={true} style={styles.input} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
 
         { loading ? (
-            <ActivityIndicator size='large' color='#0000ff'/>
+            <ActivityIndicator size='large' color='#ffffff'/>
         ) : (
             <>
             <Pressable style={styles.button} onPress={signIn}>
