@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, ScrollView, Button, Pressable, ActivityIndicator } from 'react-native';
+// Adding functionality to save the generated schedule and send it to the specified API endpoint.
+
+import { StyleSheet, Text, View, ScrollView, Button, Pressable, ActivityIndicator, Alert } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { API_URL } from '../../api/api';
 
 interface AvailabilityData {
   id: string;
@@ -29,44 +30,32 @@ const Schedule = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Funkcja do pobierania danych o dostępności z API
   const fetchAvailability = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/availability`);
+      const response = await axios.get('https://671b64ad2c842d92c37fb3ad.mockapi.io/api/v1/availability');
       setAvailabilityData(response.data);
       setError(null);
     } catch (err: any) {
-      if (err.response) {
-        setError(`Server error: ${err.response.status}`);
-      } else if (err.request) {
-        setError('Network error - check your connection');
-      } else {
-        setError('Failed to fetch availability data');
-      }
-      console.error('Error fetching availability:', err);
+      setError('Error fetching availability data');
     } finally {
       setLoading(false);
     }
   };
 
-  // Funkcja generująca harmonogram z ograniczeniami
   const generateSchedule = () => {
     const generatedSchedule: ScheduleData[] = [];
-    const scheduleMap: { [key: string]: number } = {}; // Klucz: `${date}_${shiftType}`, Wartość: liczba pracowników
+    const scheduleMap: { [key: string]: number } = {}; 
 
     availabilityData.forEach((availability) => {
       const { date, shiftType, employeeId, preferences, qualifications } = availability;
       const scheduleKey = `${date}_${shiftType}`;
 
-      // Sprawdzenie preferencji zmiany i kwalifikacji
       if (preferences.preferredShifts.includes(shiftType) && qualifications.includes('standard')) {
-        // Sprawdzenie, czy pracownik nie ma już przydzielonej zmiany na dany dzień
         const alreadyScheduled = generatedSchedule.some(
           (shift) => shift.date === date && shift.employeeId === employeeId
         );
 
-        // Sprawdzenie, czy zmiana ma już maksymalnie dwóch pracowników
         const shiftCapacityReached = (scheduleMap[scheduleKey] || 0) >= 2;
 
         if (!alreadyScheduled && !shiftCapacityReached) {
@@ -76,7 +65,6 @@ const Schedule = () => {
             employeeId,
           });
 
-          // Zaktualizowanie liczby pracowników na danej zmianie
           scheduleMap[scheduleKey] = (scheduleMap[scheduleKey] || 0) + 1;
         }
       }
@@ -85,7 +73,24 @@ const Schedule = () => {
     setScheduleData(generatedSchedule.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
   };
 
-  // Grupowanie harmonogramu wg daty
+  const saveSchedule = async () => {
+    try {
+      if (scheduleData.length === 0) {
+        Alert.alert('No Schedule', 'Please generate a schedule before saving.');
+        return;
+      }
+
+      const response = await axios.post(
+        'https://671b64ad2c842d92c37fb3ad.mockapi.io/api/v1/generated-schedule',
+        { schedule: scheduleData }
+      );
+      Alert.alert('Success', 'Schedule has been saved successfully.');
+    } catch (error) {
+      console.error('Error saving schedule:', error);
+      Alert.alert('Error', 'Failed to save schedule.');
+    }
+  };
+
   const groupedSchedule = scheduleData.reduce<{ [date: string]: ScheduleData[] }>((acc, item) => {
     if (!acc[item.date]) {
       acc[item.date] = [];
@@ -96,32 +101,36 @@ const Schedule = () => {
 
   return (
     <View style={styles.container}>
-        <Pressable
+      <Pressable
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={fetchAvailability}
         disabled={loading}
-        >
+      >
         {loading ? (
           <ActivityIndicator size="small" color="#ffffff" />
         ) : (
           <Text style={styles.text}>Fetch Employee Availability</Text>
         )}
-        </Pressable>
-        
-        <Pressable
+      </Pressable>
+
+      <Pressable
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={generateSchedule}
         disabled={loading || availabilityData.length === 0}
-        >
-        {loading ? (
-          <ActivityIndicator size="small" color="#ffffff" />
-        ) : (
-          <Text style={styles.text}>Generate Schedule</Text>
-        )}
-        </Pressable>
-      
+      >
+        <Text style={styles.text}>Generate Schedule</Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.button, loading && styles.buttonDisabled]}
+        onPress={saveSchedule}
+        disabled={loading || scheduleData.length === 0}
+      >
+        <Text style={styles.text}>Save Schedule</Text>
+      </Pressable>
+
       {error && <Text style={styles.errorText}>{error}</Text>}
-      
+
       <ScrollView>
         <Text style={styles.header}>Generated Schedule</Text>
         {Object.keys(groupedSchedule).length > 0 ? (
@@ -213,10 +222,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   buttonDisabled: {
-    backgroundColor: '#000000', // Kolor, gdy przycisk jest nieaktywny
+    backgroundColor: '#888',
   },
   text: {
-    color: '#ffffff', // Kolor tekstu przycisku
+    color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
   },
