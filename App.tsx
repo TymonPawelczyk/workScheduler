@@ -9,13 +9,14 @@ import Login from './app/screen/Login';
 import Dashboard from './app/screen/Dashboard';
 import Schedule from './app/screen/Schedule';
 import Availability from './app/screen/Availability';
-import SelectTime from './app/screen/SelectTime';
 import EmployeeDashboard from './app/screen/EmployeeDashboard';
+import SwapRequests from './app/screen/SwapRequest';
 
 const Tab = createBottomTabNavigator();
 
 function InsideTabs({ user }: { user: User | null }) {
   const isManager = user?.email && user.email.includes('mena'); // Adjust to your logic for identifying managers
+  const isEmployee = user?.email && user.email.includes('emp');
 
   return (
     <Tab.Navigator
@@ -53,7 +54,7 @@ function InsideTabs({ user }: { user: User | null }) {
           }}
         />
       )}
-      {user?.email && !user.email.includes('emp') && (
+      {!isEmployee && (
         <Tab.Screen
           name="Schedule"
           component={Schedule}
@@ -67,7 +68,7 @@ function InsideTabs({ user }: { user: User | null }) {
           }}
         />
       )}
-      {user?.email && !user.email.includes('mena') && (
+      {!isManager && (
         <Tab.Screen
           name="Availability"
           component={Availability}
@@ -81,6 +82,21 @@ function InsideTabs({ user }: { user: User | null }) {
           }}
         />
       )}
+      {/* Commented feature for swap shifts */}
+      {/* {isEmployee && (
+        <Tab.Screen
+          name="SwapRequests"
+          component={SwapRequests}
+          options={{
+            title: 'Swap Requests',
+            headerStyle: { backgroundColor: '#14213d' },
+            tabBarIcon: ({ focused }) => (
+              <Ionicons name={focused ? 'swap-horizontal' : 'swap-horizontal-outline'} color="#fca311" size={24} />
+            ),
+            headerTintColor: '#e5e5e5',
+          }}
+        />
+      )} */}
     </Tab.Navigator>
   );
 }
