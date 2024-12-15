@@ -10,7 +10,6 @@ import Dashboard from './app/screen/Dashboard';
 import Schedule from './app/screen/Schedule';
 import Availability from './app/screen/Availability';
 import EmployeeDashboard from './app/screen/EmployeeDashboard';
-import SwapRequests from './app/screen/SwapRequest';
 
 const Tab = createBottomTabNavigator();
 
