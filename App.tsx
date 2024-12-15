@@ -10,6 +10,8 @@ import Dashboard from './app/screen/Dashboard';
 import Schedule from './app/screen/Schedule';
 import Availability from './app/screen/Availability';
 import EmployeeDashboard from './app/screen/EmployeeDashboard';
+import SwapShift from './app/screen/SwapShift';
+import ManagerSwapRequests from './app/screen/ManagerSwapRequests';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,6 +78,34 @@ function InsideTabs({ user }: { user: User | null }) {
             headerStyle: { backgroundColor: '#14213d' },
             tabBarIcon: ({ focused }) => (
               <Ionicons name={focused ? 'bag-add' : 'bag-add-outline'} color="#fca311" size={24} />
+            ),
+            headerTintColor: '#e5e5e5',
+          }}
+        />
+      )}
+      {!isManager && (
+        <Tab.Screen
+          name="SwapShift"
+          component={SwapShift}
+          options={{
+            title: 'Swap Shift',
+            headerStyle: { backgroundColor: '#14213d' },
+            tabBarIcon: ({ focused }) => (
+              <Ionicons name={focused ? 'swap-horizontal' : 'swap-horizontal-outline'} color="#fca311" size={24} />
+            ),
+            headerTintColor: '#e5e5e5',
+          }}
+        />
+      )}
+      {!isEmployee && (
+        <Tab.Screen
+          name="ManagerSwapShift"
+          component={ManagerSwapRequests}
+          options={{
+            title: 'Swap Shift Requests',
+            headerStyle: { backgroundColor: '#14213d' },
+            tabBarIcon: ({ focused }) => (
+              <Ionicons name={focused ? 'swap-horizontal' : 'swap-horizontal-outline'} color="#fca311" size={24} />
             ),
             headerTintColor: '#e5e5e5',
           }}
