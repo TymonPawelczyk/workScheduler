@@ -1,32 +1,17 @@
-// Adding functionality to save the generated schedule and send it to the specified API endpoint.
-
-import { StyleSheet, Text, View, ScrollView, Button, Pressable, ActivityIndicator, Alert } from 'react-native';
+// Updated Schedule Component
+import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator, Alert } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 
-interface AvailabilityData {
-  id: string;
-  employeeId: string;
-  date: string;
-  start: string;
-  end: string;
-  shiftType: string;
-  qualifications: string[];
-  preferences: {
-    preferredShifts: string[];
-    unavailableDays: string[];
-  };
-}
-
-interface ScheduleData {
+interface EmployeeAvailability {
   date: string;
   shiftType: string;
   employeeId: string;
 }
 
 const Schedule = () => {
-  const [availabilityData, setAvailabilityData] = useState<AvailabilityData[]>([]);
-  const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
+  const [availabilityData, setAvailabilityData] = useState<EmployeeAvailability[]>([]);
+  const [scheduleData, setScheduleData] = useState<EmployeeAvailability[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +21,7 @@ const Schedule = () => {
       const response = await axios.get('https://671b64ad2c842d92c37fb3ad.mockapi.io/api/v1/availability');
       setAvailabilityData(response.data);
       setError(null);
-    } catch (err: any) {
+    } catch (err) {
       setError('Error fetching availability data');
     } finally {
       setLoading(false);
@@ -44,29 +29,16 @@ const Schedule = () => {
   };
 
   const generateSchedule = () => {
-    const generatedSchedule: ScheduleData[] = [];
-    const scheduleMap: { [key: string]: number } = {}; 
+    const generatedSchedule: EmployeeAvailability[] = [];
+    const scheduleMap: { [key: string]: boolean } = {}; 
 
     availabilityData.forEach((availability) => {
-      const { date, shiftType, employeeId, preferences, qualifications } = availability;
+      const { date, shiftType, employeeId } = availability;
       const scheduleKey = `${date}_${shiftType}`;
 
-      if (preferences.preferredShifts.includes(shiftType) && qualifications.includes('standard')) {
-        const alreadyScheduled = generatedSchedule.some(
-          (shift) => shift.date === date && shift.employeeId === employeeId
-        );
-
-        const shiftCapacityReached = (scheduleMap[scheduleKey] || 0) >= 2;
-
-        if (!alreadyScheduled && !shiftCapacityReached) {
-          generatedSchedule.push({
-            date,
-            shiftType,
-            employeeId,
-          });
-
-          scheduleMap[scheduleKey] = (scheduleMap[scheduleKey] || 0) + 1;
-        }
+      if (!scheduleMap[scheduleKey]) {
+        generatedSchedule.push({ date, shiftType, employeeId });
+        scheduleMap[scheduleKey] = true;
       }
     });
 
@@ -91,11 +63,11 @@ const Schedule = () => {
     }
   };
 
-  const groupedSchedule = scheduleData.reduce<{ [date: string]: ScheduleData[] }>((acc, item) => {
-    if (!acc[item.date]) {
-      acc[item.date] = [];
+  const groupedSchedule = scheduleData.reduce<{ [date: string]: EmployeeAvailability[] }>((acc, entry) => {
+    if (!acc[entry.date]) {
+      acc[entry.date] = [];
     }
-    acc[item.date].push(item);
+    acc[entry.date].push(entry);
     return acc;
   }, {});
 
@@ -137,20 +109,16 @@ const Schedule = () => {
           Object.keys(groupedSchedule).map((date) => (
             <View key={date} style={styles.daySection}>
               <Text style={styles.dateHeader}>{date}</Text>
-              <View style={styles.tableHeader}>
-                <Text style={styles.headerCell}>Shift Type</Text>
-                <Text style={styles.headerCell}>Employee ID</Text>
-              </View>
-              {groupedSchedule[date].map((shift, index) => (
-                <View key={index} style={styles.tableRow}>
-                  <Text style={styles.cell}>{shift.shiftType}</Text>
-                  <Text style={styles.cell}>{shift.employeeId}</Text>
+              {groupedSchedule[date].map((entry, index) => (
+                <View key={index} style={styles.row}>
+                  <Text>{entry.shiftType}</Text>
+                  <Text>{entry.employeeId}</Text>
                 </View>
               ))}
             </View>
           ))
         ) : (
-          <Text style={styles.placeholder}>No schedule generated yet.</Text>
+          <Text style={styles.placeholder}>No schedule available yet.</Text>
         )}
       </ScrollView>
     </View>
@@ -179,26 +147,31 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: '#333',
   },
-  tableHeader: {
+  row: {
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    marginBottom: 4,
-  },
-  headerCell: {
-    flex: 1,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  tableRow: {
-    flexDirection: 'row',
-    padding: 10,
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    padding: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  cell: {
-    flex: 1,
-    textAlign: 'center',
+  button: {
+    marginVertical: 4,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 4,
+    backgroundColor: 'black',
+  },
+  buttonDisabled: {
+    backgroundColor: '#888',
+  },
+  text: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   errorText: {
     color: 'red',
@@ -209,25 +182,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#888',
     marginTop: 20,
-  },
-  button: {
-    marginVertical: 4,
-    marginHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: 'black',
-  },
-  buttonDisabled: {
-    backgroundColor: '#888',
-  },
-  text: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

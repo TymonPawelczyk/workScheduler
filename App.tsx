@@ -82,21 +82,6 @@ function InsideTabs({ user }: { user: User | null }) {
           }}
         />
       )}
-      {/* Commented feature for swap shifts */}
-      {/* {isEmployee && (
-        <Tab.Screen
-          name="SwapRequests"
-          component={SwapRequests}
-          options={{
-            title: 'Swap Requests',
-            headerStyle: { backgroundColor: '#14213d' },
-            tabBarIcon: ({ focused }) => (
-              <Ionicons name={focused ? 'swap-horizontal' : 'swap-horizontal-outline'} color="#fca311" size={24} />
-            ),
-            headerTintColor: '#e5e5e5',
-          }}
-        />
-      )} */}
     </Tab.Navigator>
   );
 }
