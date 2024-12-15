@@ -1,4 +1,3 @@
-// Updated Schedule Component
 import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator, Alert } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -29,8 +28,13 @@ const Schedule = () => {
   };
 
   const generateSchedule = () => {
+    if (availabilityData.length === 0) {
+      Alert.alert('Error', 'No availability data found. Please fetch data first.');
+      return;
+    }
+
     const generatedSchedule: EmployeeAvailability[] = [];
-    const scheduleMap: { [key: string]: boolean } = {}; 
+    const scheduleMap: { [key: string]: boolean } = {};
 
     availabilityData.forEach((availability) => {
       const { date, shiftType, employeeId } = availability;
