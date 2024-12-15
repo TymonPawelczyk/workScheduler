@@ -1,65 +1,34 @@
-import { Alert, Button, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { NavigationProp } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { sendAvailabilityData } from '../../api/api';
-import { Worker, ShiftType, Shift, SchedulingConstraints } from '../../types/scheduling';
 import { Calendar } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker'; 
+import { ShiftType } from '../../types/scheduling';
 
-interface RouterProps {
-  navigation: NavigationProp<any, any>;
-}
-
-const Availability = ({ navigation }: RouterProps) => {
+const Availability = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split('T')[0]
   );
   const [selectedShift, setSelectedShift] = useState<ShiftType>(ShiftType.MORNING);
 
-  const handleDayPress = (day: any) => { // Change to any if DateObject is not available
-    setSelectedDate(day.dateString); // Save the selected date to state
+  const handleDayPress = (day: any) => {
+    setSelectedDate(day.dateString);
     Alert.alert('Selected Date', `You selected ${day.dateString}`);
   };
 
   const handleAddAvailability = async () => {
     try {
       const currentUser = FIREBASE_AUTH.currentUser?.email;
-      
+
       if (!currentUser) {
         throw new Error('User not authenticated');
       }
 
-      // Ustawiamy godziny na podstawie wybranej zmiany
-      let shiftHours = {
-        start: '08:00',
-        end: '16:00'
-      };
-      
-      switch(selectedShift) {
-        case ShiftType.MORNING:
-          shiftHours = { start: '06:00', end: '14:00' };
-          break;
-        case ShiftType.AFTERNOON:
-          shiftHours = { start: '14:00', end: '22:00' };
-          break;
-        case ShiftType.NIGHT:
-          shiftHours = { start: '22:00', end: '06:00' };
-          break;
-      }
-
       const availabilityData = {
-        employeeId: currentUser,
-        isAvailable: true,
         date: selectedDate,
-        start: shiftHours.start,
-        end: shiftHours.end,
         shiftType: selectedShift,
-        qualifications: ['standard'],
-        preferences: {
-          preferredShifts: [selectedShift],
-          unavailableDays: []
-        }
+        employeeId: currentUser,
       };
 
       const response = await sendAvailabilityData(availabilityData.employeeId, availabilityData);
@@ -78,45 +47,36 @@ const Availability = ({ navigation }: RouterProps) => {
         markedDates={{
           [selectedDate || '']: {
             selected: true,
-            selectedColor: '#14213d', // Ustawienie koloru wybranej daty
+            selectedColor: '#14213d',
           },
         }}
         theme={{
-          selectedDayBackgroundColor: '#00adf5', // Ustawienie koloru 
           todayTextColor: '#fca311',
           arrowColor: '#fca311',
-          backgroundColor: '#ffffff', // Zmień na dowolny kolor tła
+          backgroundColor: '#ffffff',
           calendarBackground: '#f0f0f0',
-          // Kolory tekstów dni
-          textSectionTitleColor: '#333333', // Kolor nazw dni tygodnia (np. "Mon", "Tue")
-          dayTextColor: '#000000', // Kolor numerów dni
-          textDisabledColor: '#adb5bd', // Kolor dni spoza bieżącego miesiąca
-          monthTextColor: '#fca311', // Kolor tekstu miesiąca
+          textSectionTitleColor: '#333333',
+          dayTextColor: '#000000',
+          textDisabledColor: '#adb5bd',
+          monthTextColor: '#fca311',
         }}
       />
-      
+
       <View style={styles.shiftSelector}>
-        <Text style={{
-          color: '#000000',
-          fontWeight: 'bold',
-          fontSize: 20
-        }}>Select Shift:</Text>
-        <View>
+        <Text style={styles.text}>Select Shift:</Text>
         <Picker
           selectedValue={selectedShift}
           onValueChange={(itemValue) => setSelectedShift(itemValue)}
         >
-          <Picker.Item label="Morning Shift (6:00-14:00)" value={ShiftType.MORNING} />
-          <Picker.Item label="Afternoon Shift (14:00-22:00)" value={ShiftType.AFTERNOON} />
-          <Picker.Item label="Night Shift (22:00-6:00)" value={ShiftType.NIGHT} />
+          <Picker.Item label="Morning Shift" value={ShiftType.MORNING} />
+          <Picker.Item label="Afternoon Shift" value={ShiftType.AFTERNOON} />
+          <Picker.Item label="Night Shift" value={ShiftType.NIGHT} />
         </Picker>
-        </View>
       </View>
 
       <Pressable style={styles.button} onPress={handleAddAvailability}>
-        <Text style={styles.text}>Add Availability</Text>
+        <Text style={styles.buttonText}>Add Availability</Text>
       </Pressable>
-
     </View>
   );
 };
@@ -136,15 +96,17 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
-    elevation: 3,
     backgroundColor: 'black',
   },
-  text: {
+  buttonText: {
     fontSize: 16,
-    lineHeight: 21,
     fontWeight: 'bold',
-    letterSpacing: 0.25,
     color: 'white',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
   },
 });
 
