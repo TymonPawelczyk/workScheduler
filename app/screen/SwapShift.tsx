@@ -54,6 +54,11 @@ const SwapShift = () => {
       return;
     }
 
+    if (selectedShift.date !== selectedSwapWith.date) {
+      Alert.alert('Error', 'You can only swap shifts on the same day.');
+      return;
+    }
+
     try {
       const currentUser = FIREBASE_AUTH.currentUser?.email;
       const swapRequest: Omit<SwapRequest, 'id'> = {
