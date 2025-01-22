@@ -43,6 +43,7 @@ const Availability = () => {
     <View style={styles.container}>
       <Calendar 
         selectedDate={selectedDate}
+        firstDay={1}
         onDayPress={handleDayPress}
         markedDates={{
           [selectedDate || '']: {
