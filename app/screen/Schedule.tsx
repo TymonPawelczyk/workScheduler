@@ -32,22 +32,42 @@ const Schedule = () => {
       Alert.alert('Error', 'No availability data found. Please fetch data first.');
       return;
     }
-
+  
     const generatedSchedule: EmployeeAvailability[] = [];
-    const scheduleMap: { [key: string]: boolean } = {};
-
+    const scheduleMap: { [key: string]: number } = {}; // Liczba pracowników na daną zmianę
+    const employeeDailySchedule: { [key: string]: boolean } = {}; // Pracownik/dzień
+  
     availabilityData.forEach((availability) => {
       const { date, shiftType, employeeId } = availability;
       const scheduleKey = `${date}_${shiftType}`;
-
-      if (!scheduleMap[scheduleKey]) {
-        generatedSchedule.push({ date, shiftType, employeeId });
-        scheduleMap[scheduleKey] = true;
+      const employeeDayKey = `${employeeId}_${date}`;
+  
+      // Sprawdź, czy pracownik już ma zmianę tego dnia
+      if (employeeDailySchedule[employeeDayKey]) {
+        return; // Pomijamy, pracownik już ma zmianę tego dnia
       }
+  
+      // Sprawdź, czy na tej zmianie jest mniej niż 2 pracowników
+      if (!scheduleMap[scheduleKey]) {
+        scheduleMap[scheduleKey] = 0;
+      }
+      if (scheduleMap[scheduleKey] >= 2) {
+        return; // Pomijamy, maksymalna liczba pracowników na zmianę osiągnięta
+      }
+  
+      // Dodaj zmianę do grafiku
+      generatedSchedule.push({ date, shiftType, employeeId });
+      scheduleMap[scheduleKey] += 1;
+      employeeDailySchedule[employeeDayKey] = true;
     });
-
-    setScheduleData(generatedSchedule.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
+  
+    setScheduleData(
+      generatedSchedule.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      )
+    );
   };
+  
 
   const saveSchedule = async () => {
     try {
