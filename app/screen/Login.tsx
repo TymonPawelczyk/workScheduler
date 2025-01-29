@@ -56,7 +56,7 @@ const Login = () => {
                 <Text style={styles.text}>Login</Text>
             </Pressable>
             <Pressable style={styles.button} onPress={signUp}>
-                <Text style={styles.text}>Sing Up</Text>
+                <Text style={styles.text}>Sign Up</Text>
             </Pressable>
             </>
         )}
