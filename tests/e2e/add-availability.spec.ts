@@ -1,6 +1,8 @@
 import { Page, test, expect } from '@playwright/test';
 import employees from '../interfaces/employees';
-import { addAvailability, loginInto } from '../page/availability-page';
+import { addAvailability } from '../page/availability-page';
+import { loginInto } from '../page/login-page';
+
 const password = employees.Password;
 
 test.beforeEach(async ({page}) => {
