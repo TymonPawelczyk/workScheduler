@@ -1,11 +1,11 @@
-interface Employees {
+interface Menagers {
     Login: Array<string>,
     Password: string,
 }
 
-const employees: Employees ={
+const menagers: Menagers ={
     Login: [ "testmena@test.com"],
     Password: "test123",
 }
 
-export default employees;
+export default menagers;
