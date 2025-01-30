@@ -24,32 +24,6 @@ function addDaysToDate(dateString: string, days: number): string {
 function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
 
-export async function loginInto(page: Page, email: string, password: string): Promise<void> {
-    await page.getByPlaceholder('Email').click();
-    await page.getByPlaceholder('Email').fill(email);
-    await page.getByPlaceholder('Password').click();
-    await page.getByPlaceholder('Password').fill(password);
-    await page.getByText("Login").click();
-}
+export async function addAvailability(page: Page): Promise<void> {}
 
-export async function addAvailability(page: Page) {
-    const startDate = '2024-11-25';
-    const availabilityLink = page.getByRole('link', { name: '  Availability' });
-    await availabilityLink.click();
-    for (let index1 = 0; index1 < 5; index1++) {
-        let typeSchift = getRandomElement(availability.Availability);
-        let newDate = addDaysToDate(startDate, index1);
-        console.log(typeSchift, newDate)
-        let selectDate = page.getByTestId(`undefined.day_${newDate}`)
-        await selectDate.click();
-        await delay(500);
-        const selectTypeShift = page.getByRole('combobox')
-        await selectTypeShift.selectOption(`${typeSchift}`);
-        await delay(500);
-        await page.getByText('Add Availability').click();
-        await delay(500);
-        
-    }
-}
