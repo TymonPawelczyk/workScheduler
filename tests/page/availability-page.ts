@@ -1,6 +1,4 @@
 import { Page, expect } from "@playwright/test";
-import availability from "../interfaces/availability";
-import { get } from "http";
 
 let today = new Date();
 const todayDay = Number(today.getDate().toString().padStart(2, '0'));
