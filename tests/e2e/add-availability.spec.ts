@@ -1,6 +1,8 @@
 import { Page, test, expect } from '@playwright/test';
 import employees from '../interfaces/employees';
-import { addAvailability, loginInto } from '../page/availability-page';
+import { addAvailability } from '../page/availability-page';
+import { loginInto } from '../page/login-page';
+
 const password = employees.Password;
 
 test.beforeEach(async ({page}) => {
@@ -9,12 +11,9 @@ test.beforeEach(async ({page}) => {
 
 employees.Login.forEach(email => {
   test.describe(`Adding availability for ${email}`, () => {
-    test(`Login ${email}`, async ({page}) => {
-      await loginInto(page, email, password);
-    });
     test(`Add availability ${email}`, async ({page}) => {
       await loginInto(page, email, password);
-      await addAvailability(page);
+      await addAvailability(page, 3);
     });
   });
 });
