@@ -11,12 +11,9 @@ test.beforeEach(async ({page}) => {
 
 employees.Login.forEach(email => {
   test.describe(`Adding availability for ${email}`, () => {
-    test(`Login ${email}`, async ({page}) => {
-      await loginInto(page, email, password);
-    });
     test(`Add availability ${email}`, async ({page}) => {
       await loginInto(page, email, password);
-      await addAvailability(page);
+      await addAvailability(page, 3);
     });
   });
 });
